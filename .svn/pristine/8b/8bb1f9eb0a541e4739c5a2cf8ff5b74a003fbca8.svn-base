@@ -1,0 +1,19 @@
+package listeners.dialogListeners;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import view.dialogs.ModulOrParameterDialog;
+import view.dialogs.NewParameterDialog;
+
+public class OpenParameterDialogListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		ModulOrParameterDialog.getInstance().dispose();
+		NewParameterDialog.getInstance().setName("");
+		NewParameterDialog.getInstance().setVisible(true);
+	}
+
+}

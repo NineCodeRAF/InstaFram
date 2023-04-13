@@ -1,0 +1,184 @@
+package actions;
+
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
+
+import javax.sound.sampled.Clip;
+
+import controller.OpenTab;
+import controller.ReadFromFile;
+import controller.WriteInFile;
+import listeners.AboutListener;
+import listeners.HelpListener;
+import listeners.RegisterListener;
+import listeners.dialogListeners.CompanyCancelListener;
+import listeners.dialogListeners.CompanyOkListener;
+import listeners.dialogListeners.ModulCancelListener;
+import listeners.dialogListeners.ModulOkListener;
+import listeners.dialogListeners.ParameterCancelListener;
+import listeners.dialogListeners.ParameterOkListener;
+import listeners.dialogListeners.ProjekatCancelListener;
+import listeners.dialogListeners.ProjekatOkListener;
+import messages.Messages;
+import model.MyClipboard;
+import view.dialogs.NewProjectDialog;
+
+public class ActionManager implements ClipboardOwner {
+	
+	private static ActionManager instance = null;
+	ReadFromFile readFromFile;
+	AddNode addNode;
+	DeleteNode deleteNode;
+	WriteInFile writeInFIle;
+	OpenFile openFile;
+	Save save;
+	SaveAs saveAs;
+	AboutListener aboutListener;
+	OpenTab openTab;
+	CloseTab closeTab;
+	HelpListener helpListener;
+	ReadUsers readUsers;
+	LogIn logIn;
+	Register register;
+	SaveUsers saveUsers;
+	RegisterUserClose registerUserClose;
+	RegisterUserOK registerUserOk;
+	RegisterListener registerListener;
+	Messages messages;
+	CutAction cutAction;
+	CopyAction copyAction;
+	PasteAction pasteAction;
+	MyClipboard myClipboard;
+	
+	public ActionManager() {
+		// TODO Auto-generated constructor stub
+		readFromFile = new ReadFromFile();
+		addNode = new AddNode();
+		deleteNode = new DeleteNode();
+		writeInFIle = new WriteInFile();
+		openFile = new OpenFile();
+		save = new Save();
+		saveAs = new SaveAs();
+		aboutListener = new AboutListener();
+		openTab = new OpenTab();
+		closeTab = new CloseTab();
+		helpListener = new HelpListener();
+		readUsers = new ReadUsers();
+		logIn = new LogIn();
+		register = new Register();
+		saveUsers = new SaveUsers();
+		registerUserClose = new RegisterUserClose();
+		registerUserOk = new RegisterUserOK();
+		registerListener = new RegisterListener();
+		messages = new Messages();
+		cutAction = new CutAction();
+		copyAction = new CopyAction();
+		pasteAction = new PasteAction();
+		myClipboard = new MyClipboard("");
+	}
+	
+	public MyClipboard getMyClipboard() {
+		return myClipboard;
+	}
+	
+	public CutAction getCutAction() {
+		return cutAction;
+	}
+	
+	public CopyAction getCopyAction() {
+		return copyAction;
+	}
+	
+	public PasteAction getPasteAction() {
+		return pasteAction;
+	}
+
+	public Messages getMessages() {
+		return messages;
+	}
+	
+	public RegisterListener getRegisterListener() {
+		return registerListener;
+	}
+	
+	public RegisterUserOK getRegisterUserOk() {
+		return registerUserOk;
+	}
+	
+	public RegisterUserClose getRegisterUserClose() {
+		return registerUserClose;
+	}
+	
+	public SaveUsers getSaveUsers() {
+		return saveUsers;
+	}
+	
+	public Register getRegister() {
+		return register;
+	}
+	
+	public LogIn getLogIn() {
+		return logIn;
+	}
+	
+	public ReadUsers getReadUsers() {
+		return readUsers;
+	}
+	
+	public CloseTab getCloseTab() {
+		return closeTab;
+	}
+	
+	public OpenTab getOpenTab() {
+		return openTab;
+	}
+	
+	public HelpListener getHelpListener() {
+		return helpListener;
+	}
+	
+	public static ActionManager getInstance() {
+		if (instance == null) instance = new ActionManager();
+		return instance;
+	}
+	
+	public AboutListener getAboutListener() {
+		return aboutListener;
+	}
+	
+	public SaveAs getSaveAs() {
+		return saveAs;
+	}
+	
+	public Save getSave() {
+		return save;
+	}
+	
+	public ReadFromFile getReadFromFile() {
+		return readFromFile;
+	}
+	
+	public AddNode getAddNode() {
+		return addNode;
+	}
+	
+	public DeleteNode getDeleteNode() {
+		return deleteNode;
+	}
+	
+	public WriteInFile getWriteInFIle() {
+		return writeInFIle;
+	}
+	
+	public OpenFile getOpenFile() {
+		return openFile;
+	}
+
+	@Override
+	public void lostOwnership(Clipboard arg0, Transferable arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

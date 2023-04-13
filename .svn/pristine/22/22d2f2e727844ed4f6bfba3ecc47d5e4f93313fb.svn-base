@@ -1,0 +1,66 @@
+package view.dialogs;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import listeners.dialogListeners.CompanyCancelListener;
+import listeners.dialogListeners.CompanyOkListener;
+import listeners.dialogListeners.ProjekatCancelListener;
+import listeners.dialogListeners.ProjekatOkListener;
+import view.MainFrame;
+
+public class NewCompanyDialog extends JDialog{
+	private static NewCompanyDialog instance = null;
+	private JLabel name;
+	private JTextField tfName;
+	
+	public NewCompanyDialog() {
+		
+		setLayout(null);
+		setResizable(false);
+		setTitle("Add new company");
+		setSize(400, 170);
+		setLocationRelativeTo(MainFrame.getInstance());
+		initialize();
+	}
+	
+	public void initialize() {
+		
+		name = new JLabel("Enter name of company:");
+		tfName = new JTextField();
+
+		name.setBounds(10, 35, 200, 25);
+		tfName.setBounds(180, 35, 190, 25);
+		
+		JButton btnOk = new JButton("Ok");
+		JButton btnCancel = new JButton("Cancel");
+		CompanyOkListener listener = new CompanyOkListener(this);
+		
+		btnOk.setBounds(120, 100, 70, 25);
+		btnCancel.setBounds(210, 100, 80, 25);
+		
+		btnOk.addActionListener(listener);
+		btnCancel.addActionListener(new CompanyCancelListener(this));
+		tfName.addKeyListener(listener);
+		
+		add(name);
+		add(tfName);
+		add(btnOk);
+		add(btnCancel);
+	}
+	
+	public static NewCompanyDialog getInstance() {
+		if(instance==null) instance = new NewCompanyDialog();
+		return instance;
+	}
+
+	public String getName() {
+		return tfName.getText();
+	}
+
+	public void setName(String name) {
+		tfName.setText(name);
+	}
+}

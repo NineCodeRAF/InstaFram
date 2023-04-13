@@ -1,0 +1,77 @@
+package listeners.dialogListeners;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import actions.ActionManager;
+import model.myTree.MyTreeNode;
+import model.myTree.ParametarNode;
+import model.myTree.ProjekatNode;
+import view.MainFrame;
+import view.dialogs.NewParameterDialog;
+import view.dialogs.NewProjectDialog;
+
+public class ParameterOkListener implements ActionListener,KeyListener{
+	private NewParameterDialog dialog;
+	private ParametarNode node;
+	
+	public ParameterOkListener(NewParameterDialog dialog) {
+		this.dialog = dialog;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		MyTreeNode selectedNode = (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getLastSelectedPathComponent();
+		if (dialog.getName() == null || dialog.getName().equals("")) {
+			
+			ActionManager.getInstance().getMessages().praznoPoljeParametar();
+
+		}
+		else {
+			node = new ParametarNode(dialog.getName());
+			node.setType(dialog.getCmb().getSelectedItem().toString());
+			selectedNode.addNode(node);
+			dialog.dispose();
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			MyTreeNode selectedNode = (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getLastSelectedPathComponent();
+			if (dialog.getName() == null || dialog.getName().equals("")) {
+				
+				ActionManager.getInstance().getMessages().praznoPoljeParametar();
+
+			}
+			else {
+				node = new ParametarNode(dialog.getName());
+				node.setType(dialog.getCmb().getSelectedItem().toString());
+				selectedNode.addNode(node);
+				dialog.dispose();
+				SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+			}
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}

@@ -1,0 +1,294 @@
+package view.panels;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
+import actions.ActionManager;
+import model.myTree.MyTreeNode;
+import model.myTree.ParametarNode;
+import view.MainFrame;
+
+
+public class ParametarCustomPanel extends JPanel{
+	private JTextField tfAuthor = new JTextField();
+	private JLabel lbAuthor = new JLabel("Author: ");
+	private JButton btnSave = new JButton("Save");
+	private JTextField tfName = new JTextField();
+	private JLabel lbName = new JLabel("Name: ");
+	private JLabel lbLogo = new JLabel("Logo path: ");
+	private JTextField tfLogoPath = new JTextField();
+	private JButton btnLogoChoose = new JButton("Choose");
+	private JLabel lbLook = new JLabel("Choose look and feel: ");
+	private JComboBox<String> cbLookType = new JComboBox<>();
+	private JCheckBox cbShortcut = new JCheckBox("Desktop shortcut");
+	private JCheckBox cbStart = new JCheckBox("Start after installation");
+	private JLabel lbTerms = new JLabel("Terms of use path: ");
+	private JTextField tfTermsPath = new JTextField();
+	private JButton btnTermsChoose = new JButton("Choose");
+	private ParametarNode node;
+	
+	public ParametarCustomPanel() {
+		init();
+	}
+	
+	public void init(){
+		JPanel savePanel = new JPanel();
+		JPanel namePanel = new JPanel();
+		JPanel authorPanel = new JPanel();
+		JPanel termsPanel = new JPanel();
+		JPanel logoPanel = new JPanel();
+		JPanel lookPanel = new JPanel();
+		JPanel shortcutPanel = new JPanel();
+		JPanel startUpPanel = new JPanel();
+		
+		BorderLayout borderLayout = new BorderLayout(10,10);
+		FlowLayout flowLayout = new FlowLayout(FlowLayout.RIGHT,10,10);
+		FlowLayout fileFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		
+		btnSave.setPreferredSize(new Dimension(150,50));
+		tfAuthor.setPreferredSize(new Dimension(200, 30));
+		tfName.setPreferredSize(new Dimension(250, 30));
+		btnLogoChoose.setPreferredSize(new Dimension(75,30));
+		tfLogoPath.setPreferredSize(new Dimension(350,30));
+		btnTermsChoose.setPreferredSize(new Dimension(75,30));
+		tfTermsPath.setPreferredSize(new Dimension(300,30));
+		cbStart.setPreferredSize(new Dimension(200, 30));
+		
+		
+		setLayout(borderLayout);
+		
+		addTypes();
+		
+		authorPanel.add(lbAuthor); 
+		authorPanel.add(tfAuthor);
+		namePanel.add(lbName); 
+		namePanel.add(tfName);
+		logoPanel.add(lbLogo);
+		logoPanel.add(tfLogoPath); 
+		logoPanel.add(btnLogoChoose);
+		lookPanel.add(lbLook);
+		lookPanel.add(cbLookType);
+		shortcutPanel.add(cbShortcut);
+		startUpPanel.add(cbStart);
+		termsPanel.add(lbTerms);
+		termsPanel.add(tfTermsPath); 
+		termsPanel.add(btnTermsChoose);
+		
+		savePanel.add(btnSave);
+		
+		setLayout(new GridLayout(8, 1));
+		
+		add(namePanel);
+		add(authorPanel);
+		add(logoPanel);
+		add(termsPanel);
+		add(lookPanel);
+		add(shortcutPanel);
+		add(startUpPanel);
+		add(savePanel);
+		addActions();
+	}
+	
+	private void addActions() {
+		
+		btnSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				node.setName(tfName.getText());
+				node.setAuthor(tfAuthor.getText());
+				node.setLogo(tfLogoPath.getText());
+				node.setTerms(tfTermsPath.getText());
+				node.setLookAndFeel(cbLookType.getSelectedIndex());
+				node.setStartUp(cbStart.isSelected());
+				node.setShortcut(cbShortcut.isSelected());
+				
+			}
+		});
+		btnLogoChoose.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.APPROVE_OPTION);
+				chooser.showOpenDialog(MainFrame.getInstance());
+				
+				File file = chooser.getSelectedFile();
+				if(file != null) {
+					tfLogoPath.setText(file.getPath());
+					((ParametarNode)node).setLogo(tfLogoPath.getText());
+				} else {
+					tfLogoPath.setText("");
+					((ParametarNode)node).setLogo("");
+				}
+			}
+		});
+		
+		btnTermsChoose.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.APPROVE_OPTION);
+				chooser.showOpenDialog(MainFrame.getInstance());
+				
+				File file = chooser.getSelectedFile();
+				if(file != null) {
+					tfTermsPath.setText(file.getPath());
+					((ParametarNode)node).setTerms(tfTermsPath.getText());
+				} else {
+					tfTermsPath.setText("");
+					((ParametarNode)node).setTerms("");
+				}
+			}
+		});
+	}
+	private void addTypes() {
+		for(LookAndFeelInfo look : UIManager.getInstalledLookAndFeels()) {
+			cbLookType.addItem(look.getName());
+		}
+	}
+	
+	public ParametarNode getNode() {
+		return node;
+	}
+	public void setNode(ParametarNode node) {
+		this.node = node;
+	}
+
+	public JTextField getTfAuthor() {
+		return tfAuthor;
+	}
+
+	public void setTfAuthor(JTextField tfAuthor) {
+		this.tfAuthor = tfAuthor;
+	}
+
+	public JLabel getLbAuthor() {
+		return lbAuthor;
+	}
+
+	public void setLbAuthor(JLabel lbAuthor) {
+		this.lbAuthor = lbAuthor;
+	}
+
+	public JButton getBtnSave() {
+		return btnSave;
+	}
+
+	public void setBtnSave(JButton btnSave) {
+		this.btnSave = btnSave;
+	}
+
+	public JTextField getTfName() {
+		return tfName;
+	}
+
+	public void setTfName(JTextField tfName) {
+		this.tfName = tfName;
+	}
+
+	public JLabel getLbName() {
+		return lbName;
+	}
+
+	public void setLbName(JLabel lbName) {
+		this.lbName = lbName;
+	}
+
+	public JLabel getLbLogo() {
+		return lbLogo;
+	}
+
+	public void setLbLogo(JLabel lbLogo) {
+		this.lbLogo = lbLogo;
+	}
+
+	public JTextField getTfLogoPath() {
+		return tfLogoPath;
+	}
+
+	public void setTfLogoPath(JTextField tfLogoPath) {
+		this.tfLogoPath = tfLogoPath;
+	}
+
+	public JButton getBtnLogoChoose() {
+		return btnLogoChoose;
+	}
+
+	public void setBtnLogoChoose(JButton btnLogoChoose) {
+		this.btnLogoChoose = btnLogoChoose;
+	}
+
+	public JLabel getLbLook() {
+		return lbLook;
+	}
+
+	public void setLbLook(JLabel lbLook) {
+		this.lbLook = lbLook;
+	}
+
+	public JComboBox<String> getCbLookType() {
+		return cbLookType;
+	}
+
+	public void setCbLookType(JComboBox<String> cbLookType) {
+		this.cbLookType = cbLookType;
+	}
+
+	public JCheckBox getCbShortcut() {
+		return cbShortcut;
+	}
+
+	public void setCbShortcut(JCheckBox cbShortcut) {
+		this.cbShortcut = cbShortcut;
+	}
+
+	public JCheckBox getCbStart() {
+		return cbStart;
+	}
+
+	public void setCbStart(JCheckBox cbStart) {
+		this.cbStart = cbStart;
+	}
+
+	public JLabel getLbTerms() {
+		return lbTerms;
+	}
+
+	public void setLbTerms(JLabel lbTerms) {
+		this.lbTerms = lbTerms;
+	}
+
+	public JTextField getTfTermsPath() {
+		return tfTermsPath;
+	}
+
+	public void setTfTermsPath(JTextField tfTermsPath) {
+		this.tfTermsPath = tfTermsPath;
+	}
+
+	public JButton getBtnTermsChoose() {
+		return btnTermsChoose;
+	}
+
+	public void setBtnTermsChoose(JButton btnTermsChoose) {
+		this.btnTermsChoose = btnTermsChoose;
+	}
+	
+}

@@ -1,0 +1,85 @@
+package view.panels;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import model.myTree.ModulNode;
+import model.myTree.MyTreeNode;
+import model.myTree.ParametarNode;
+import view.MainFrame;
+
+
+public class InstallSecondPanel extends JPanel{
+	private JTextField tfAuthor = new JTextField();
+	private JLabel lbAuthor = new JLabel("Author: ");
+	private JButton btnInstall = new JButton("Install");
+	private ModulNode module;
+	
+	public InstallSecondPanel(ModulNode module){
+		this.module = module;
+		init();
+		setText();
+		addActions();
+	}
+	
+	public void init(){
+		JPanel bottomPanel = new JPanel();
+		JPanel centralPanel = new JPanel();
+		
+		BorderLayout borderLayout = new BorderLayout(10,10);
+		FlowLayout flowLayout = new FlowLayout(FlowLayout.RIGHT,10,10);
+		FlowLayout fileFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		
+		tfAuthor.setPreferredSize(new Dimension(200, 30));
+		btnInstall.setPreferredSize(new Dimension(150,50));
+		
+		setText();
+		tfAuthor.setEnabled(false);
+		
+		centralPanel.setLayout(fileFlowLayout);
+		bottomPanel.setLayout(flowLayout);
+		
+		setLayout(borderLayout);
+		
+		centralPanel.add(lbAuthor); 
+		centralPanel.add(tfAuthor);
+		
+		bottomPanel.add(btnInstall);
+		
+		this.add(bottomPanel, BorderLayout.SOUTH);
+		this.add(centralPanel,BorderLayout.CENTER);
+	}
+	
+	private void setText() {
+		for(MyTreeNode node : module.getChildren()) {
+			if(node instanceof ParametarNode) {
+				ParametarNode parameter = (ParametarNode) node;
+				
+				if(parameter.getType().equals("Author")) {
+					tfAuthor.setText(parameter.getAuthor());
+				}else if(parameter.getType().equals("Custom")) {
+					tfAuthor.setText(parameter.getAuthor());
+				}
+			}
+		}
+	}
+	
+	private void addActions() {
+		btnInstall.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				InstallThirdScreen installThirdScreen = new InstallThirdScreen(module);
+				MainFrame.getInstance().getInstallFirstPanel().changeContentPane(installThirdScreen);
+			}
+		});
+	}
+}

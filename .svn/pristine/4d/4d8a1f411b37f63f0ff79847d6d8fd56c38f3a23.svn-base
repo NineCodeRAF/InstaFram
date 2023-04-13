@@ -1,0 +1,20 @@
+package listeners.dialogListeners;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import view.dialogs.NewParameterDialog;
+import view.dialogs.NewProjectDialog;
+
+public class ParameterCancelListener implements ActionListener{
+	private NewParameterDialog dialog;
+	
+	public ParameterCancelListener(NewParameterDialog dialog) {
+		this.dialog = dialog;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		dialog.dispose();
+	}
+}

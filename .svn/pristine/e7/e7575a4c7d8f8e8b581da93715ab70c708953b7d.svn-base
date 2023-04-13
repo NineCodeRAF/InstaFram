@@ -1,0 +1,15 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+public class Register extends AbstractActions{
+	
+	public Register() {
+		putValue(NAME, "Register");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+	}
+}

@@ -1,0 +1,12 @@
+package model.myTree;
+
+import java.io.Serializable;
+
+public class ModulNode extends MyTreeNode implements Serializable{
+
+	public ModulNode(String name) {
+		super(name);
+		// TODO Auto-generated constructor stub
+	}
+
+}

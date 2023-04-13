@@ -1,0 +1,105 @@
+package view.dialogs;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import listeners.dialogListeners.ModulCancelListener;
+import listeners.dialogListeners.ModulOkListener;
+import listeners.dialogListeners.ProjekatCancelListener;
+import listeners.dialogListeners.ProjekatOkListener;
+import view.MainFrame;
+
+public class NewModulDialog extends JDialog{
+	
+	private static NewModulDialog instance = null;
+	private JLabel name;
+	private JTextField tfName;
+	private JTextField tfChoose;
+	private JButton btnChoose;
+	
+	public NewModulDialog() {
+		
+		setLayout(null);
+		setResizable(false);
+		setTitle("Add new modul");
+		setSize(400, 200);
+		setLocationRelativeTo(MainFrame.getInstance());
+		initialize();
+	}
+	
+	public void initialize() {
+		
+		name = new JLabel("Enter name of modul:");
+		tfName = new JTextField();
+		tfChoose = new JTextField();
+
+		name.setBounds(10, 35, 200, 25);
+		tfName.setBounds(180, 35, 190, 25);
+		
+		JButton btnOk = new JButton("Ok");
+		JButton btnCancel = new JButton("Cancel");
+		btnChoose = new JButton("Choose");
+		ModulOkListener listener = new ModulOkListener(this);
+		
+		tfChoose.setBounds(10, 85, 200, 25);
+		btnChoose.setBounds(230,85,80,25);
+		
+		btnOk.setBounds(120, 130, 70, 25);
+		btnCancel.setBounds(210, 130, 80, 25);
+		
+		btnOk.addActionListener(listener);
+		btnCancel.addActionListener(new ModulCancelListener(this));
+		tfName.addKeyListener(listener);
+		
+		add(name);
+		add(tfName);
+		add(btnChoose);
+		add(tfChoose);
+		add(btnOk);
+		add(btnCancel);
+		
+		btnChoose.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.APPROVE_OPTION);
+				chooser.showOpenDialog(MainFrame.getInstance());
+				
+				File file = chooser.getSelectedFile();
+				tfChoose.setText(file.getPath());
+			}
+		});
+	}
+	
+	public static NewModulDialog getInstance() {
+		if(instance==null) instance = new NewModulDialog();
+		return instance;
+	}
+
+	public String getName() {
+		return tfName.getText();
+	}
+
+	public void setName(String name) {
+		tfName.setText(name);
+	}
+	
+	public String getPath()
+	{
+		return tfChoose.getText();
+	}
+	
+	public void setPath(String path)
+	{
+		tfChoose.setText(path);
+	}
+
+}

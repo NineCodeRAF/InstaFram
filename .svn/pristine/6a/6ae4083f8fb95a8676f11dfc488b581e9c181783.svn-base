@@ -1,0 +1,50 @@
+package view.menu;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+import actions.ActionManager;
+
+public class MenuFile extends JMenu{
+	
+	
+	
+	public MenuFile(int x) {
+		 setText("File");
+		 addComp(x);
+	}
+	
+	
+	
+	
+	private void addComp(int x)
+	{
+		if(x==1)
+		{
+		add(ActionManager.getInstance().getReadFromFile());
+		addSeparator();
+		add(ActionManager.getInstance().getUndoAction());
+		add(ActionManager.getInstance().getRedoAction());
+		addSeparator();
+		add(ActionManager.getInstance().getAddNode());
+		add(ActionManager.getInstance().getDeleteNode());
+		addSeparator();
+		add(ActionManager.getInstance().getSave());
+		add(ActionManager.getInstance().getSaveAs());
+		addSeparator();
+		add(ActionManager.getInstance().getCutAction());
+		add(ActionManager.getInstance().getCopyAction());
+		add(ActionManager.getInstance().getPasteAction());
+		
+		}
+		else
+		{
+			add(ActionManager.getInstance().getOpenFile());
+			addSeparator();
+			add(ActionManager.getInstance().getSave());
+			add(ActionManager.getInstance().getSaveAs());
+		}
+		
+	}
+	
+}

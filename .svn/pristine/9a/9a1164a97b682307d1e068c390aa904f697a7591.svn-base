@@ -1,0 +1,127 @@
+package messages;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import actions.ActionManager;
+import model.myTree.MyTreeNode;
+import view.AboutView;
+import view.HelpView;
+import view.MainFrame;
+import view.TabView;
+
+public class Messages {
+	
+	public void cuvanjePraznogStabla()
+	{
+		JOptionPane.showMessageDialog(null, "You don't have data for save!", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	public void export()
+	{
+		JOptionPane.showMessageDialog(null, "Exported", 
+				"Error", JOptionPane.INFORMATION_MESSAGE);
+		return;
+	}
+	
+	public void noSelectedModel() {
+		JOptionPane.showMessageDialog(null, "Select one modul", "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void praznoPoljeKompanija()
+	{
+		JOptionPane.showMessageDialog(null, "Enter name of company, please", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	public void praznoPoljeParametar()
+	{
+		JOptionPane.showMessageDialog(null, "Enter name of parameter, please", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	public void praznoPoljeModul()
+	{
+		JOptionPane.showMessageDialog(null, "Enter name of modul, please", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	public void praznoPoljeProjekat()
+	{
+		JOptionPane.showMessageDialog(null, "Enter name of project, please", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	public void praznoPoljeRegister()
+	{
+		JOptionPane.showMessageDialog(null, "All fields must be filled", 
+				"Error", JOptionPane.INFORMATION_MESSAGE);
+		return;
+	}
+	public void postojiKosrisnikRegister()
+	{
+		JOptionPane.showMessageDialog(null, "Username registred, change it please", 
+				"Error", JOptionPane.INFORMATION_MESSAGE);
+		return;
+	}
+	public void sifreNisuIste()
+	{
+		JOptionPane.showMessageDialog(null, "Passwords aren't same", 
+				"Error", JOptionPane.INFORMATION_MESSAGE);
+		return;
+	}
+	
+	public void nijeSlika()
+	{
+		JOptionPane.showMessageDialog(null, "You didn't choose image!", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	public void nijeTekstualniDokument()
+	{
+		JOptionPane.showMessageDialog(null, "You didn't choose text file!", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	public void nijeValidanFile()
+	{
+		JOptionPane.showMessageDialog(null, "File is not valid!", 
+				"Error", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	public void brisanjeCvora(Object obj)
+	{
+		MyTreeNode selected = (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getLastSelectedPathComponent();
+		JLabel lbChildren = new JLabel("Number of children: "+selected.getChildCount());
+		JLabel lbLeaf = new JLabel("Number of leafs: "+selected.getLeafCount());
+		TabView tab = MainFrame.getInstance().getSplitPanel().getTab();
+		int dialog2 = JOptionPane.showConfirmDialog(null, "You really want to delete nodes?\n"+lbChildren.getText()+"\n"+lbLeaf.getText(),"Alert",JOptionPane.YES_NO_OPTION);
+		if(dialog2 == JOptionPane.YES_OPTION) {
+			if(((MyTreeNode)obj)!=null) {
+				if(((MyTreeNode)obj) == (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getModel().getRoot()) {
+					MainFrame.getInstance().getSplitPanel().getTree().removeRoot();
+					MainFrame.getInstance().getSplitPanel().getTree().setModel(null);
+					}
+				else
+					((MyTreeNode)obj).removeFromParent();
+				if(tab.getNodes().contains(selected))
+					tab.remove(tab.getComponent(tab.getNodes().indexOf(selected)));
+				SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+			}
+		}
+	}
+	
+	
+}

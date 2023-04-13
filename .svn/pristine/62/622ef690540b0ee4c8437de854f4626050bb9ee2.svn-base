@@ -1,0 +1,69 @@
+package view;
+
+
+import java.util.ArrayList;
+
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+
+import actions.ActionManager;
+import controller.TreeCellEditor;
+import model.MyTransferable;
+import model.MyTreeModel;
+import model.myTree.ModulNode;
+import model.myTree.MyTreeNode;
+import model.myTree.ParametarNode;
+
+public class Tree extends JTree{
+	private TreeCellEditor editor;
+	public Tree() {
+		//MyTreeModel tModel = new MyTreeModel();
+		//tModel=ActionManager.getInstance().getReadFromFile().func("Tree.txt");
+		editor = new TreeCellEditor(this, new TreeCellRenderer());
+		this.setModel(null);
+		this.setCellEditor(editor);
+		this.setCellRenderer(new TreeCellRenderer());
+		this.setEditable(true);
+		this.setInvokesStopCellEditing(true);
+		addMouseListener(new ActionManager().getOpenTab());
+	}
+
+	public void removeRoot() {
+		MyTreeModel model = (MyTreeModel) getModel();
+		model.getRoot().removeAllChildren();
+		model.removeAll();
+		model.removeRoot();
+		model.reload();
+		setModel(null);
+		
+		
+		
+	}
+	
+	public void paste(ArrayList<ParametarNode> nodesToPaste) {
+		MyTreeNode node = (MyTreeNode) getLastSelectedPathComponent();
+
+		if (node == null)
+			return;
+
+		if (node instanceof ModulNode) {
+			for (MyTreeNode myTreeNode : nodesToPaste) {
+				ParametarNode newNode =new ParametarNode(myTreeNode.toString());
+				newNode.setName(((ParametarNode)myTreeNode).getName());
+				newNode.setAuthor(((ParametarNode)myTreeNode).getAuthor());
+				newNode.setLogo(((ParametarNode)myTreeNode).getLogo());
+				newNode.setLookAndFeel(((ParametarNode)myTreeNode).getLookAndFeel());
+				newNode.setTerms(((ParametarNode)myTreeNode).getTerms());
+				newNode.setShortcut(((ParametarNode)myTreeNode).isShortcut());
+				newNode.setStartUp(((ParametarNode)myTreeNode).isStartUp());
+				newNode.setType(((ParametarNode)myTreeNode).getType());
+				node.addNode(newNode);
+			}
+
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+		}
+	}
+
+	
+	
+}

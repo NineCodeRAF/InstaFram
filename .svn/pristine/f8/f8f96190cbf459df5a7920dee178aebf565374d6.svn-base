@@ -1,0 +1,77 @@
+package view.panels;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
+import model.myTree.ParametarNode;
+
+public class ParametarLookPanel extends JPanel{
+	
+	private JLabel lbLook;
+	private JComboBox<String> cmbLook;
+	private JButton btnSave;
+	private ParametarNode node;
+	
+	public ParametarLookPanel() {
+		// TODO Auto-generated constructor stub
+		func();
+	}
+	
+	public void func()
+	{
+		lbLook = new JLabel("Look and feel:");
+		cmbLook = new JComboBox<>();
+		btnSave = new JButton("Save");
+		JPanel bottomPanel = new JPanel();
+		JPanel centralPanel = new JPanel();
+		
+		BorderLayout borderLayout = new BorderLayout(10,10);
+		FlowLayout bottomFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		FlowLayout centarFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		
+		btnSave.setPreferredSize(new Dimension(150,50));
+		for(LookAndFeelInfo look : UIManager.getInstalledLookAndFeels()) {
+			cmbLook.addItem(look.getName());
+		}
+		
+		centralPanel.setLayout(centarFlowLayout);
+		bottomPanel.setLayout(bottomFlowLayout);
+		
+		setLayout(borderLayout);
+		
+		centralPanel.add(lbLook); 
+		centralPanel.add(cmbLook);
+		
+		bottomPanel.add(btnSave);
+		
+		this.add(bottomPanel, BorderLayout.SOUTH);
+		this.add(centralPanel,BorderLayout.CENTER);
+		
+		btnSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				node.setStr((String) cmbLook.getSelectedItem());;
+			}
+		});
+	}
+	public JComboBox<String> getCmbLook() {
+		return cmbLook;
+	}
+	public void setNode(ParametarNode node) {
+		this.node = node;
+	}
+
+}

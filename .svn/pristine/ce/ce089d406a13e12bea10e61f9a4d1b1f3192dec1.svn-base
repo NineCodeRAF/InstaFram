@@ -1,0 +1,85 @@
+package model;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import model.myTree.MyTreeNode;
+import view.MainFrame;
+
+public class MyTreeModel extends DefaultTreeModel implements Serializable{
+	
+	private static  MyTreeNode root;
+	private File file = null;
+	
+	public MyTreeModel(String name) {
+		super(root=new MyTreeNode(name));
+		
+	}
+	
+	
+	
+	public void addChild(MyTreeNode node)
+	{
+		root.getChildren().add(node);
+		node.setParent(root);
+	}
+	
+	public MyTreeNode getRoot() {
+		return root;
+	}
+	
+	public void setRoot(MyTreeNode root1) {
+		 root = root1;
+	}
+	
+	public void removeRoot()
+	{
+		this.setRoot(null);
+	}
+	
+	public MyTreeNode getChild(MyTreeNode parent, int index) {
+		// TODO Auto-generated method stub
+		return (MyTreeNode) parent.getChildAt(index);
+	}
+	
+	public int getChildCount(MyTreeNode parent) {
+		// TODO Auto-generated method stub
+		return parent.getChildCount();
+	}
+	
+	public boolean isLeaf(MyTreeNode node) {
+		if(node.getChildCount() == 0)
+			return true;
+		return false;
+	}
+	
+	public int getIndexOfChild(MyTreeNode parent, MyTreeNode child) {
+		// TODO Auto-generated method stub
+		return parent.getIndex(child);
+	}
+	
+	public void removeAll()
+	{
+		root.removeAllChildren();
+	}
+	public void setFile(File file) {
+		this.file = file;
+	}
+	
+	public File getFile() {
+		return file;
+	}
+}
+	
+	
+
+

@@ -1,0 +1,74 @@
+package view.panels;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import model.myTree.ParametarNode;
+import model.myTree.ProjekatNode;
+
+public class ProjectPanel extends JPanel{
+	private JButton btnChoose;
+	private JTextField tfChoose;
+	private JButton btnExport;
+	private JButton btnInstall;
+	private ProjekatNode node;
+	
+	public ProjectPanel() {
+		// TODO Auto-generated constructor stub
+		func();
+	}
+	
+	public void func()
+	{
+		btnChoose = new JButton("Choose");
+		tfChoose = new JTextField();
+		btnExport = new JButton("Export");
+		btnInstall = new JButton("Install");
+		JPanel bottomPanel = new JPanel();
+		JPanel centralPanel = new JPanel();
+		
+		BorderLayout borderLayout = new BorderLayout(10,10);
+		FlowLayout bottomFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		FlowLayout centarFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		
+		btnExport.setPreferredSize(new Dimension(170,30));
+		btnInstall.setPreferredSize(new Dimension(170,30));
+		btnChoose.setPreferredSize(new Dimension(170,30));
+		tfChoose.setPreferredSize(new Dimension(200, 30));
+		
+		centralPanel.setLayout(centarFlowLayout);
+		bottomPanel.setLayout(bottomFlowLayout);
+		
+		setLayout(borderLayout);
+		
+		centralPanel.add(tfChoose); 
+		centralPanel.add(btnChoose);
+		
+		bottomPanel.add(btnExport);
+		bottomPanel.add(btnInstall);
+		
+		this.add(bottomPanel, BorderLayout.SOUTH);
+		this.add(centralPanel,BorderLayout.CENTER);
+		
+	}
+	
+	public JTextField getTfChoose() {
+		return tfChoose;
+	}
+	
+	public void setNode(ProjekatNode node) {
+		this.node = node;
+	}
+	
+	public ProjekatNode getNode() {
+		return node;
+	}
+}

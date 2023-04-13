@@ -1,0 +1,26 @@
+package model.myTree;
+
+import java.io.Serializable;
+
+import javax.swing.tree.TreeNode;
+
+public class ProjekatNode extends MyTreeNode implements Serializable{
+	
+	private String pathChoose="";
+	
+	public ProjekatNode(String name) {
+		super(name);
+		// TODO Auto-generated constructor stub
+	}
+	
+	public void setPath(String path) {
+		this.pathChoose = path;
+	}
+	
+	
+	public String getPathChoose() {
+		// TODO Auto-generated method stub
+		return pathChoose;
+	}
+
+}

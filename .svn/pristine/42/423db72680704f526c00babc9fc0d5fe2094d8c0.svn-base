@@ -1,0 +1,140 @@
+package view.dialogs;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import actions.ActionManager;
+import listeners.dialogListeners.ProjekatCancelListener;
+import listeners.dialogListeners.ProjekatOkListener;
+import view.LogInView;
+import view.MainFrame;
+
+public class RegisterDialog extends JDialog{
+	
+	private static RegisterDialog instance = null;
+	private JLabel username;
+	private JLabel password;
+	private JLabel confirmPassword;
+	private JTextField tfUsername;
+	private JPasswordField tfPassword;
+	private JPasswordField tfConfirmPassword;
+	private JButton btnOk;
+	private JButton btnCancel;
+	
+	
+	public RegisterDialog() {
+		
+		setLayout(null);
+		setResizable(false);
+		setTitle("Register new user");
+		setSize(400, 250);
+		setLocationRelativeTo(null);
+		initialize();
+	}
+	
+	public void initialize() {
+		
+		username = new JLabel("Username:");
+		password = new JLabel("Password:");
+		confirmPassword = new JLabel("Confirm password:");
+		tfUsername = new JTextField();
+		tfPassword = new JPasswordField();
+		tfConfirmPassword = new JPasswordField();
+		
+		JButton btnOk = new JButton("Ok");
+		JButton btnCancel = new JButton("Cancel");
+		
+		username.setBounds(10, 25, 200, 25);
+		tfUsername.setBounds(180, 25, 190, 25);
+		password.setBounds(10,75,200,25);
+		tfPassword.setBounds(180,75,190,25);
+		confirmPassword.setBounds(10,125,200,25);
+		tfConfirmPassword.setBounds(180,125,190,25);
+		btnOk.setBounds(120, 175, 70, 25);
+		btnCancel.setBounds(210, 175, 80, 25);
+		
+		
+		
+//		btnOk.addActionListener(new ProjekatOkListener(this));
+//		btnCancel.addActionListener(new ProjekatCancelListener(this));
+		
+		add(username);
+		add(tfUsername);
+		add(password);
+		add(tfPassword);
+		add(confirmPassword);
+		add(tfConfirmPassword);
+		add(btnOk);
+		add(btnCancel);
+		
+		btnCancel.addActionListener(ActionManager.getInstance().getRegisterUserClose());
+		btnOk.addActionListener(ActionManager.getInstance().getRegisterUserOk());
+		tfConfirmPassword.addKeyListener(ActionManager.getInstance().getRegisterListener());
+		tfPassword.addKeyListener(ActionManager.getInstance().getRegisterListener());
+		tfUsername.addKeyListener(ActionManager.getInstance().getRegisterListener());
+		
+		setVisible(true);
+	}
+	
+	public static RegisterDialog getInstance() {
+		if(instance==null) instance = new RegisterDialog();
+		return instance;
+	}
+
+	public JLabel getUsername() {
+		return username;
+	}
+
+	public void setUsername(JLabel username) {
+		this.username = username;
+	}
+
+	public JLabel getPassword() {
+		return password;
+	}
+
+	public void setPassword(JLabel password) {
+		this.password = password;
+	}
+
+	public JLabel getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(JLabel confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
+
+	public JTextField getTfUsername() {
+		return tfUsername;
+	}
+
+	public void setTfUsername(JTextField tfUsername) {
+		this.tfUsername = tfUsername;
+	}
+
+	public JTextField getTfPassword() {
+		return tfPassword;
+	}
+
+	public void setTfPassword(JPasswordField tfPassword) {
+		this.tfPassword = tfPassword;
+	}
+
+	public JTextField getTfConfirmPassword() {
+		return tfConfirmPassword;
+	}
+
+	public void setTfConfirmPassword(JPasswordField tfConfirmPassword) {
+		this.tfConfirmPassword = tfConfirmPassword;
+	}
+	
+	
+
+}

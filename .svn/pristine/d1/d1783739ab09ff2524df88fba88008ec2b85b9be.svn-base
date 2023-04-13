@@ -1,0 +1,50 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import model.User;
+import model.UserType;
+import view.LogInView;
+import view.dialogs.RegisterDialog;
+
+public class RegisterUserOK extends AbstractActions{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		func();
+	}
+	
+	public void func()
+	{
+		String Username = RegisterDialog.getInstance().getTfUsername().getText();
+		String Password = RegisterDialog.getInstance().getTfPassword().getText();
+		String ComfirmPassword = RegisterDialog.getInstance().getConfirmPassword().getText();
+		
+		if(Username.equals("")||Password.equals("")||ComfirmPassword.equals(""))
+		{
+			ActionManager.getInstance().getMessages().praznoPoljeRegister();
+			return;
+		}
+		else if(!(Password.equals(ComfirmPassword)))
+		{
+			ActionManager.getInstance().getMessages().sifreNisuIste();
+			return;
+		}
+		
+		User user = new User();
+		user.setUsername(Username);
+		user.setPassword(Password);
+		user.setUserType(UserType.operativniKorisnik);
+		
+		if(LogInView.getInstance().getUsers().contains(user))
+		{
+			ActionManager.getInstance().getMessages().postojiKosrisnikRegister();
+			return;
+		}
+		
+		LogInView.getInstance().getUsers().add(user);
+		ActionManager.getInstance().getSaveUsers().func();
+		RegisterDialog.getInstance().dispose();
+	}
+
+}

@@ -1,0 +1,95 @@
+package commands;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import model.MyTreeModel;
+import model.myTree.ModulNode;
+import model.myTree.MyTreeNode;
+import model.myTree.ParametarNode;
+import model.myTree.ProjekatNode;
+import view.MainFrame;
+import view.TabView;
+import view.dialogs.ModulOrParameterDialog;
+import view.dialogs.NewCompanyDialog;
+import view.dialogs.NewParameterDialog;
+import view.dialogs.NewProjectDialog;
+
+public class NewNodeCommand extends AbstractCommand{
+	
+	MyTreeNode selectedNode;
+	MyTreeNode oldNode;
+	
+	public NewNodeCommand(MyTreeNode selectedNode, Object oldNode) {
+		// TODO Auto-generated constructor stub
+		this.selectedNode = selectedNode;
+		if(oldNode instanceof MyTreeNode)
+			this.oldNode = (MyTreeNode) oldNode;
+		else
+			this.oldNode = null;
+		
+	}
+
+	@Override
+	public void doCommand() {
+		// TODO Auto-generated method stub
+		if(oldNode == null) {
+			if((MainFrame.getInstance().getSplitPanel().getTree().getModel()) == null)
+			{
+				NewCompanyDialog.getInstance().setName("");
+				NewCompanyDialog.getInstance().setVisible(true);
+				
+			}
+			else {
+				if(selectedNode==null) {
+					NewProjectDialog.getInstance().setName("");
+					NewProjectDialog.getInstance().setVisible(true);
+					selectedNode = (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getModel().getRoot();
+				}
+				else {
+					if(selectedNode instanceof ProjekatNode)
+						ModulOrParameterDialog.getInstance().setVisible(true);
+					else if(selectedNode instanceof ModulNode)
+					{
+						NewParameterDialog.getInstance().setName("");
+						NewParameterDialog.getInstance().setVisible(true);
+					}
+					else if(selectedNode instanceof ParametarNode)
+					{
+							JOptionPane.showMessageDialog(null, "You can't add anything on parameter!", 
+									"Error", JOptionPane.ERROR_MESSAGE);
+							return;
+					}
+					else if(selectedNode instanceof MyTreeNode)
+					{
+						NewProjectDialog.getInstance().setName("");
+						NewProjectDialog.getInstance().setVisible(true);
+					}
+					
+				}
+				
+			}
+				
+		
+		}
+		else{
+			selectedNode.addNode(oldNode);
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+			
+		}
+		
+	}
+
+	@Override
+	public void undoCommand() {
+		// TODO Auto-generated method stub
+		if(selectedNode!=null)
+			oldNode = selectedNode.getChildren().get(selectedNode.getChildCount()-1);
+		DeleteNodeCommand counterCommand = new DeleteNodeCommand(oldNode, selectedNode);
+		counterCommand.doCommand();
+	}
+}

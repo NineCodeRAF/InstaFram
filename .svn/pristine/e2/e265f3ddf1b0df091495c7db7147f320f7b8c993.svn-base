@@ -1,0 +1,68 @@
+package listeners.dialogListeners;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import actions.ActionManager;
+import model.MyTreeModel;
+import model.myTree.ModulNode;
+import model.myTree.MyTreeNode;
+import view.MainFrame;
+import view.TabView;
+import view.dialogs.NewCompanyDialog;
+
+public class CompanyOkListener implements ActionListener, KeyListener {
+	private NewCompanyDialog dialog;
+	
+	public CompanyOkListener(NewCompanyDialog dialog) {
+		this.dialog = dialog;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (dialog.getName() == null || dialog.getName().equals("")) {
+			
+			ActionManager.getInstance().getMessages().praznoPoljeKompanija();
+
+		}
+		else {
+		MainFrame.getInstance().getSplitPanel().getTree().setModel(new MyTreeModel(dialog.getName()));
+		dialog.dispose();
+		SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			if (dialog.getName() == null || dialog.getName().equals("")) {
+				
+				ActionManager.getInstance().getMessages().praznoPoljeKompanija();
+			}
+			else {
+				MainFrame.getInstance().getSplitPanel().getTree().setModel(new MyTreeModel(dialog.getName()));
+				dialog.dispose();
+				SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}

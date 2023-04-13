@@ -1,0 +1,27 @@
+package controller;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import model.myTree.MyTreeNode;
+import view.MainFrame;
+import view.TabView;
+
+public class OpenTab extends MouseAdapter{
+	
+	private MyTreeNode selected = null;
+	private TabView tab = null;
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		selected = (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getLastSelectedPathComponent();
+		tab = MainFrame.getInstance().getSplitPanel().getTab();
+		if(e.getClickCount() == 2)
+		{
+			
+			tab.openTab(selected);
+			
+		}
+	}
+
+}

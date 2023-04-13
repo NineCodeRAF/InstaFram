@@ -1,0 +1,16 @@
+package listeners.dialogListeners;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import view.dialogs.ModulOrParameterDialog;
+
+public class ModulOrParameterCancelListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		ModulOrParameterDialog.getInstance().dispose();;
+	}
+
+}

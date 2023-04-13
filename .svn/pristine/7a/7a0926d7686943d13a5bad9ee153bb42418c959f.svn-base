@@ -1,0 +1,174 @@
+package view;
+
+import java.awt.Component;
+import java.awt.Font;
+import java.util.ArrayList;
+
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
+import model.myTree.MyTreeNode;
+import model.myTree.ParametarNode;
+import model.observer.Obs;
+import view.panels.ParametarAuthorPanel;
+import view.panels.ParametarLogoPanel;
+import view.panels.ParametarLookPanel;
+import view.panels.ParametarNamePanel;
+import view.panels.ParametarShortcutPanel;
+import view.panels.ParametarStartPanel;
+import view.panels.ParametarTermsPanel;
+
+public class TabView extends JTabbedPane implements Obs{
+	
+	private ArrayList<MyTreeNode> nodes = new ArrayList<>();
+	public TabView() {
+		
+	}
+	
+	public void openTab(MyTreeNode node)
+	{
+		if(node instanceof ParametarNode) {
+			if(((ParametarNode) node).getType().equals("Name")) {
+				ParametarNamePanel par = new ParametarNamePanel();
+				if(!nodes.contains(node))
+				{
+					par.setNode((ParametarNode) node);
+					par.getTfName().setText(((ParametarNode) node).getStr());
+					nodes.add(getTabCount(), node);
+					addTab(node.toString(), par);
+					setSelectedComponent(par);
+					node.register(this);
+					
+				}
+				else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+			}
+			else if(((ParametarNode) node).getType().equals("Author")) {
+				ParametarAuthorPanel par = new ParametarAuthorPanel();
+				if(!nodes.contains(node))
+				{
+					par.setNode((ParametarNode) node);
+					par.getTfName().setText(((ParametarNode) node).getStr());
+					nodes.add(getTabCount(), node);
+					addTab(node.toString(), par);
+					setSelectedComponent(par);
+					node.register(this);
+					
+				}
+				else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+			}
+			else if(((ParametarNode) node).getType().equals("Logo")) {
+				ParametarLogoPanel par = new ParametarLogoPanel();
+				if(!nodes.contains(node))
+				{
+					par.setNode((ParametarNode) node);
+					par.getTfLogo().setText(((ParametarNode) node).getStr());
+					nodes.add(getTabCount(), node);
+					addTab(node.toString(), par);
+					setSelectedComponent(par);
+					node.register(this);
+					
+				}
+				else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+			}
+			else if(((ParametarNode) node).getType().equals("Terms of use")) {
+				ParametarTermsPanel par = new ParametarTermsPanel();
+				if(!nodes.contains(node))
+				{
+					par.setNode((ParametarNode) node);
+					par.getTfTerms().setText(((ParametarNode) node).getStr());
+					nodes.add(getTabCount(), node);
+					addTab(node.toString(), par);
+					setSelectedComponent(par);
+					node.register(this);
+					
+				}
+				else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+			}
+			else if(((ParametarNode) node).getType().equals("Look and feel")) {
+				ParametarLookPanel par = new ParametarLookPanel();
+				if(!nodes.contains(node))
+				{
+					par.setNode((ParametarNode) node);
+					if(((ParametarNode) node).getStr().length()>0)
+						par.getCmbLook().setSelectedItem(((ParametarNode) node).getStr());
+					nodes.add(getTabCount(), node);
+					addTab(node.toString(), par);
+					setSelectedComponent(par);
+					node.register(this);
+					
+				}
+				else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+			}
+			else if(((ParametarNode) node).getType().equals("Desktop shortcut")) {
+				ParametarShortcutPanel par = new ParametarShortcutPanel();
+				if(!nodes.contains(node))
+				{
+					par.setNode((ParametarNode) node);
+					par.getCb().setSelected(((ParametarNode) node).getBool());
+					nodes.add(getTabCount(), node);
+					addTab(node.toString(), par);
+					setSelectedComponent(par);
+					node.register(this);
+					
+				}
+				else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+			}
+			else if(((ParametarNode) node).getType().equals("Start up")) {
+				ParametarStartPanel par = new ParametarStartPanel();
+				if(!nodes.contains(node))
+				{
+					par.setNode((ParametarNode) node);
+					par.getCb().setSelected(((ParametarNode) node).getBool());
+					nodes.add(getTabCount(), node);
+					addTab(node.toString(), par);
+					setSelectedComponent(par);
+					node.register(this);
+					
+				}
+				else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+			}
+		}
+		else
+		{
+			if(!nodes.contains(node))
+			{
+				JPanel panel = new JPanel();
+				nodes.add(getTabCount(), node);
+				addTab(node.toString(), panel);
+				setSelectedComponent(panel);
+				node.register(this);
+				
+			}
+			else setSelectedComponent(this.getComponentAt(nodes.indexOf(node)));
+		}
+	}
+	
+	public void setText(String str, int index)
+	{
+		JTextArea textArea = (JTextArea)(getComponentAt(index));
+		textArea.setText(str);
+	}
+	
+	public ArrayList<MyTreeNode> getNodes() {
+		return nodes;
+	}
+	
+	public void setNodeName(MyTreeNode beforeNode, MyTreeNode tempNode)
+	{
+		if(nodes.contains(beforeNode))
+		{
+			int index = nodes.indexOf(beforeNode);
+			setTitleAt(index, tempNode.toString());
+		}
+	}
+
+	@Override
+	public void update(MyTreeNode node) {
+		int index = nodes.indexOf(node);
+		setTitleAt(index, node.toString());
+		
+	}
+
+}

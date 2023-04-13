@@ -1,0 +1,41 @@
+package model.myTree;
+
+import java.io.Serializable;
+
+import model.observer.Subject;
+
+public class ParametarNode extends MyTreeNode implements Serializable{
+	
+	private String type;
+	private String str;
+	private Boolean bool;
+
+	public ParametarNode(String name) {
+		super(name);
+		// TODO Auto-generated constructor stub
+		bool=false;
+		str="";
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public String getStr() {
+		return str;
+	}
+	public void setStr(String str) {
+		this.str = str;
+	}
+	public Boolean getBool() {
+		return bool;
+	}
+	public void setBool(Boolean bool) {
+		this.bool = bool;
+	}
+
+}

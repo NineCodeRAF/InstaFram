@@ -1,0 +1,270 @@
+package controller;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Enumeration;
+
+import javax.swing.JFileChooser;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import actions.AbstractActions;
+import actions.ActionManager;
+import model.MyTreeModel;
+import model.myTree.MyTreeNode;
+import view.MainFrame;
+import view.TabView;
+
+public class ReadFromFile extends AbstractActions{
+	
+	public ReadFromFile() {
+		putValue(ACCELERATOR_KEY,KeyStroke.getKeyStroke(
+		        KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		putValue(SMALL_ICON, loadIcon("images/new_folder.png"));
+		putValue(NAME, "Open file");
+		putValue(SHORT_DESCRIPTION, "Open File");
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		File file = null;
+		MyTreeModel mModel;
+		JFileChooser fileChooser = new JFileChooser();
+		if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+			file = fileChooser.getSelectedFile();
+		if(file!=null)
+		{
+			if(MainFrame.getInstance().getSplitPanel().getTree().getModel()!=null)
+			{
+				mModel = (MyTreeModel) MainFrame.getInstance().getSplitPanel().getTree().getModel();
+				if(mModel!=null) {
+					if(mModel.getRoot()!=null) {
+							mModel.removeAll();
+							mModel.removeRoot();
+					}
+				mModel.reload();
+				}
+			}
+			else
+				mModel = new MyTreeModel("root");
+				
+				
+				try {
+					FileInputStream fis = new FileInputStream(file);
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					MyTreeNode root = (MyTreeNode)ois.readObject();
+					if(root != null) {
+						MainFrame.getInstance().getSplitPanel().getTab().getNodes().removeAll(
+								MainFrame.getInstance().getSplitPanel().getTab().getNodes());
+						MainFrame.getInstance().getSplitPanel().getTree().setModel(new MyTreeModel(root.toString()));
+						((MyTreeModel)MainFrame.getInstance().getSplitPanel().getTree().getModel()).setRoot(root);
+						TabView tab = MainFrame.getInstance().getSplitPanel().getTab();
+						Enumeration<MyTreeNode> lista = root.preorderEnumeration();
+						MyTreeNode cvor = lista.nextElement();
+						while(cvor!=null)
+						{
+							cvor.register(tab);
+							cvor = (MyTreeNode) cvor.getNextNode();
+						}
+						MainFrame.getInstance().getSplitPanel().getTab().removeAll();
+						SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+					}
+					fis.close();
+					ois.close();
+					
+				} catch (Exception e) {
+					ActionManager.getInstance().getMessages().nijeValidanFile();
+				}
+		}
+		
+		
+	}  
+	
+	
+	/*public MyTreeModel funcNovi()
+	{
+		
+		File file = null;
+		JFileChooser fileChooser = new JFileChooser();
+		if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+			file = fileChooser.getSelectedFile();
+		MyTreeModel mModel = (MyTreeModel) MainFrame.getInstance().getSplitPanel().getTree().getModel();
+		if(mModel!=null) {
+			if(mModel.getRoot()!=null) {
+					mModel.removeAll();
+					mModel.removeRoot();
+			}
+		mModel.reload();
+		}
+		
+		try {
+			int tabCount, prevtabCount=0,i,j,k;
+			String line;
+			MyTreeModel model = new MyTreeModel("root");
+			MyTreeNode node,prevNode;
+			if(file == null)
+				return null;
+			model.setFile(file);
+			FileReader fr = new FileReader(model.getFile());
+			BufferedReader br = new BufferedReader(fr);
+			line = br.readLine();
+			String[] splitovano;
+			splitovano = line.split("~~");
+			model.setRoot(node = new MyTreeNode(splitovano[0]));
+			if(splitovano.length>1)
+				node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+			while((line=br.readLine())!=null)
+			{
+				tabCount=0;
+				splitovano = line.split("~~");
+				for(i=0;i<splitovano[0].length();i++)
+				{
+					if(splitovano[0].charAt(i)=='\t')
+						tabCount++;
+					else
+						break;
+				}
+				
+				if(tabCount == 1)
+				{
+					prevNode = node;
+					model.addChild(node = new MyTreeNode(splitovano[0].substring(i, splitovano[0].length())));
+					node.setParent(model.getRoot());
+					if(splitovano.length>1)
+						node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+				}
+				else {
+				
+				if(prevtabCount<tabCount)
+				{
+					prevNode = node;
+					prevNode.getChildren().add(node= new MyTreeNode(splitovano[0].substring(i, splitovano[0].length())));
+					node.setParent(prevNode);
+					if(splitovano.length>1)
+						node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+				}
+				else if(prevtabCount>tabCount)
+				{
+					k = prevtabCount - tabCount;
+					for(j=0 ; j<=k ; j++)
+					{
+						node = node.getParent();
+					}
+					prevNode = node;
+					prevNode.getChildren().add(node = new MyTreeNode(splitovano[0].substring(i, splitovano[0].length())));
+					node.setParent(prevNode);
+					if(splitovano.length>1)
+						node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+				}
+				else
+				{
+					prevNode = node;
+					prevNode.getParent().getChildren().add(node = new MyTreeNode(splitovano[0].substring(i, splitovano[0].length())));
+					node.setParent(prevNode.getParent());
+					if(splitovano.length>1)
+						node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+				}
+				}
+				prevtabCount = tabCount;
+				
+			}
+			
+			
+			br.close();
+			
+			return model;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public void funcDodaj(MyTreeNode selected)
+	{
+		File file = null;
+		JFileChooser fileChooser = new JFileChooser();
+		if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+			file = fileChooser.getSelectedFile();
+		if(file != null)
+		{
+		try {
+			int tabCount, prevtabCount=0,i,j,k;
+			String line;
+			MyTreeNode node,prevNode;
+			
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			line = br.readLine();
+			String[] splitovano;
+			node = selected;
+			while((line=br.readLine())!=null)
+			{
+				tabCount=0;
+				splitovano = line.split("~~");
+				for(i=0;i<splitovano[0].length();i++)
+				{
+					if(splitovano[0].charAt(i)=='\t')
+						tabCount++;
+					else
+						break;
+				}
+				
+				
+				if(prevtabCount<tabCount)
+				{
+					prevNode = node;
+					prevNode.getChildren().add(node= new MyTreeNode(splitovano[0].substring(i, splitovano[0].length())));
+					node.setParent(prevNode);
+					if(splitovano.length>1)
+						node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+				}
+				else if(prevtabCount>tabCount)
+				{
+					k = prevtabCount - tabCount;
+					for(j=0 ; j<=k ; j++)
+					{
+						node = node.getParent();
+					}
+					prevNode = node;
+					prevNode.getChildren().add(node = new MyTreeNode(splitovano[0].substring(i, splitovano[0].length())));
+					node.setParent(prevNode);
+					if(splitovano.length>1)
+						node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+				}
+				else
+				{
+					prevNode = node;
+					prevNode.getParent().getChildren().add(node = new MyTreeNode(splitovano[0].substring(i, splitovano[0].length())));
+					node.setParent(prevNode.getParent());
+					if(splitovano.length>1)
+						node.setNodeBookText(splitovano[1].replaceAll("@#@#", "\n"));
+				}
+				prevtabCount = tabCount;
+				
+			}
+			
+			
+			br.close();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}*/
+
+	  
+
+}

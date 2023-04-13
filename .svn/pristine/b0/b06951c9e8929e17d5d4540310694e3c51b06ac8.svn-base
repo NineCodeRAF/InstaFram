@@ -1,0 +1,70 @@
+package listeners.dialogListeners;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import actions.ActionManager;
+import model.myTree.ModulNode;
+import model.myTree.MyTreeNode;
+import model.myTree.ProjekatNode;
+import view.MainFrame;
+import view.dialogs.NewModulDialog;
+import view.dialogs.NewProjectDialog;
+
+public class ModulOkListener implements ActionListener,KeyListener{
+private NewModulDialog dialog;
+	
+	public ModulOkListener(NewModulDialog dialog) {
+		this.dialog = dialog;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		MyTreeNode selectedNode = (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getLastSelectedPathComponent();
+		if (dialog.getName() == null || dialog.getName().equals("")) {
+			
+			ActionManager.getInstance().getMessages().praznoPoljeModul();
+
+		}
+		else {
+		selectedNode.addNode(new ModulNode(dialog.getName()));
+		dialog.dispose();
+		SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			MyTreeNode selectedNode = (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getLastSelectedPathComponent();
+			if (dialog.getName() == null || dialog.getName().equals("")||dialog.getPath() == null||dialog.getPath().equals("")) {
+				
+				ActionManager.getInstance().getMessages().praznoPoljeModul();
+			}
+			else {
+				selectedNode.addNode(new ModulNode(dialog.getName()));
+				dialog.dispose();
+				SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}

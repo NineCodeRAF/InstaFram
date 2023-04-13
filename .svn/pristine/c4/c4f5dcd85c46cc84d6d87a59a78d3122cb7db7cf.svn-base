@@ -1,0 +1,152 @@
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MenuBar;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+import actions.ActionManager;
+import model.User;
+import model.UserType;
+import model.myTree.MyTreeNode;
+import view.menu.MenuFile;
+import view.menu.MyMenuBar;
+import view.panels.InstallFirstPanel;
+
+public class MainFrame extends JFrame{
+	private static MainFrame instance = null;
+	private Toolkit tk;
+	private MyMenuBar menuBar;
+	private JPanel jpTop;
+	private JToolBar tb;
+	
+	private CentarFrame splitPanel = new CentarFrame();
+	private BotPanel bottomPanel = new BotPanel();
+	private JPanel leftPanel = new JPanel();
+	private JPanel rightPanel = new JPanel();
+	private InstallFirstPanel installFirstPanel;
+	
+	private User user;
+	
+	
+	public MainFrame() {
+		tk = Toolkit.getDefaultToolkit();
+		jpTop = new JPanel();
+		user = LogInView.getInstance().getUser();
+		if(user.getUserType()==UserType.administrator)
+		{
+			menuBar = new MyMenuBar(1);
+			tb = new ToolBar(1);
+			iskljuceneOpcije();
+		}
+		else
+		{
+			menuBar = new MyMenuBar(2);
+			tb = new ToolBar(3);
+		}
+		add(tb, BorderLayout.NORTH);
+		setJMenuBar(menuBar);
+		Dimension screenSize = tk.getScreenSize();
+		int screenHeight = screenSize.height;
+		int screenWidth = screenSize.width;
+		setSize(screenWidth/2, screenHeight/2);
+		
+		add(splitPanel, BorderLayout.CENTER);
+		add(bottomPanel, BorderLayout.SOUTH);
+		add(leftPanel, BorderLayout.WEST);
+		add(rightPanel, BorderLayout.EAST);
+		
+		setIconImage(new ImageIcon("images/link.png").getImage());
+		setTitle("InstaFram");
+		setVisible(true);
+		setLocationRelativeTo(null);
+		
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		closeMethod();
+		
+		
+	}
+	
+	private void iskljuceneOpcije()
+	{
+		MenuFile mf = menuBar.getMenuFile();
+		ActionManager.getInstance().getCutAction().setEnabled(true);
+		ActionManager.getInstance().getCopyAction().setEnabled(true);
+		ActionManager.getInstance().getPasteAction().setEnabled(true);
+	}
+	
+	
+	private void closeMethod()
+	{
+		addWindowListener(new WindowAdapter() {
+			  public void windowClosing(WindowEvent e) {
+				    int confirmed = JOptionPane.showConfirmDialog(null, 
+				        "Do you want save?", "Exit",
+				        JOptionPane.YES_NO_CANCEL_OPTION);
+
+				    if (confirmed == JOptionPane.NO_OPTION) {
+				    	AboutView.getInstance().dispose();
+					    HelpView.getInstance().dispose();
+				        dispose();
+				      
+				    }
+				    else if(confirmed == JOptionPane.YES_OPTION)
+				    {
+				    	ActionManager.getInstance().getWriteInFIle().save();
+				    	AboutView.getInstance().dispose();
+					    HelpView.getInstance().dispose();
+					    if(getSplitPanel().getTree().getModel()!=null)
+					    	dispose();
+				    }
+				  }
+				});
+	}
+	
+	public void setInstallFirstPanel(InstallFirstPanel installFirstPanel) {
+		this.installFirstPanel = installFirstPanel;
+	}
+	
+	public InstallFirstPanel getInstallFirstPanel() {
+		return installFirstPanel;
+	}
+
+	public void setMenuBar(MyMenuBar menuBar) {
+		this.menuBar = menuBar;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public JToolBar getTb() {
+		return tb;
+	}
+
+
+	public void setTb(JToolBar tb) {
+		this.tb = tb;
+	}
+
+
+	public static MainFrame getInstance() {
+		if (instance == null) instance = new MainFrame();
+		return instance;
+	}
+	
+	public CentarFrame getSplitPanel() {
+		return splitPanel;
+	}
+}

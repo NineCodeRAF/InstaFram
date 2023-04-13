@@ -1,0 +1,10 @@
+package model.observer;
+
+import model.myTree.MyTreeNode;
+
+public interface Subject {
+	
+	public void register (Obs addObs);
+	public void unregister (Obs deleteObs);
+	public void notifyObserver ();
+}

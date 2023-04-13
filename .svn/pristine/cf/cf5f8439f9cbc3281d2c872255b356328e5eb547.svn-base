@@ -1,0 +1,85 @@
+package commands;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import model.MyTreeModel;
+import model.myTree.MyTreeNode;
+import view.MainFrame;
+import view.TabView;
+
+public class DeleteNodeCommand extends AbstractCommand{
+	
+	private MyTreeNode selectedNode;
+	private MyTreeNode deletedFrom;
+	
+	public DeleteNodeCommand(MyTreeNode selectedNode, Object deletedFrom) {
+		// TODO Auto-generated constructor stub
+		this.selectedNode = selectedNode;
+		if(deletedFrom == null)
+			this.deletedFrom = null;
+		else
+			this.deletedFrom = (MyTreeNode) deletedFrom;
+	}
+
+	@Override
+	public void doCommand() {
+		// TODO Auto-generated method stub
+		TabView tab = MainFrame.getInstance().getSplitPanel().getTab();
+		if(deletedFrom == null) {
+			if(((MyTreeModel)(MainFrame.getInstance().getSplitPanel().getTree().getModel())).getRoot().getChildCount()==0)
+			{
+				MainFrame.getInstance().getSplitPanel().getTree().removeRoot();
+				MainFrame.getInstance().getSplitPanel().getTree().setModel(null);
+				return;
+			}
+			JLabel lbChildren = new JLabel("Number of children: "+selectedNode.getChildCount());
+			JLabel lbLeaf = new JLabel("Number of leafs: "+selectedNode.getLeafCount());
+			int dialog2 = JOptionPane.showConfirmDialog(null, "You really want to delete nodes?\n"+lbChildren.getText()+"\n"+lbLeaf.getText(),"Alert",JOptionPane.YES_NO_OPTION);
+			if(dialog2 == JOptionPane.YES_OPTION) {
+				if(selectedNode!=null) {
+					if(((MyTreeNode)selectedNode) == (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getModel().getRoot()) {
+						MainFrame.getInstance().getSplitPanel().getTree().removeRoot();
+						MainFrame.getInstance().getSplitPanel().getTree().setModel(null);
+						}
+					else {
+						deletedFrom = selectedNode.getParent();
+						selectedNode.removeFromParent();
+					}
+					if(tab.getNodes().contains(selectedNode))
+						tab.remove(tab.getComponent(tab.getNodes().indexOf(selectedNode)));
+				}
+			}
+		}
+		else {
+			if(selectedNode!=null) {
+				if((selectedNode) == (MyTreeNode) MainFrame.getInstance().getSplitPanel().getTree().getModel().getRoot()) {
+					MainFrame.getInstance().getSplitPanel().getTree().removeRoot();
+					MainFrame.getInstance().getSplitPanel().getTree().setModel(null);
+					}
+				else {
+					deletedFrom = selectedNode.getParent();
+					selectedNode.removeFromParent();
+				}
+				if(tab.getNodes().contains(selectedNode))
+				{
+					tab.remove(tab.getComponent(tab.getNodes().indexOf(selectedNode)));
+					tab.getNodes().remove(selectedNode);
+				}
+			}
+		}
+		SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getSplitPanel().getTree());
+	}
+
+	@Override
+	public void undoCommand() {
+		// TODO Auto-generated method stub
+		AbstractCommand counterCommand = new NewNodeCommand(deletedFrom, selectedNode);
+		counterCommand.doCommand();
+	}
+
+}

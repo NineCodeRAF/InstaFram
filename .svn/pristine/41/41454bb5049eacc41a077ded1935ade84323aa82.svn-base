@@ -1,0 +1,46 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+
+import model.User;
+import model.UserType;
+
+public class ReadUsers extends AbstractActions{
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+
+		
+	}
+	
+	public void readUsers(ArrayList<User> users)
+	{
+		String line;
+		String splitLine[];
+		User user;
+		try {
+			FileReader fr = new FileReader("Korisnici.txt");
+			BufferedReader br = new BufferedReader(fr);
+			while((line = br.readLine())!=null)
+			{
+				user = new User();
+				splitLine = line.split(";");
+				user.setUsername(splitLine[0]);
+				user.setPassword(splitLine[1]);
+				if(splitLine[2].equals("operativniKorisnik"))
+					user.setUserType(UserType.operativniKorisnik);
+				else
+					user.setUserType(UserType.administrator);
+				users.add(user);
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+
+}

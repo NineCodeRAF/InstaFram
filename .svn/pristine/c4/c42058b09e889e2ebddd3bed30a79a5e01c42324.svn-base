@@ -1,0 +1,35 @@
+package actions;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import model.User;
+import model.UserType;
+import view.LogInView;
+
+public class SaveUsers {
+	
+	public void func()
+	{
+		try {
+			FileWriter fw = new FileWriter("Korisnici.txt");
+			BufferedWriter bw = new BufferedWriter(fw);
+			for(User u : LogInView.getInstance().getUsers())
+			{
+				bw.write(u.getUsername()+";"+u.getPassword()+";");
+				if(u.getUserType()==UserType.administrator)
+					bw.write("administrator");
+				else
+					bw.write("operativniKorisnik");
+				if(LogInView.getInstance().getUsers().indexOf(u)!=LogInView.getInstance().getUsers().size()-1)
+					bw.newLine();
+			}
+			bw.close();
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

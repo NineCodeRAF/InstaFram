@@ -1,0 +1,47 @@
+package actions;
+
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.KeyStroke;
+
+import model.myTree.ParametarNode;
+import view.MainFrame;
+import view.panels.ParametarAuthorPanel;
+
+public class PasteAction extends AbstractActions{
+	
+	public PasteAction() {
+		putValue(ACCELERATOR_KEY,KeyStroke.getKeyStroke(
+		        KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+		putValue(SMALL_ICON, loadIcon("images/paste.png"));
+		putValue(NAME, "Paste");
+		putValue(SHORT_DESCRIPTION, "Paste");	
+		}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Transferable contents = ActionManager.getInstance().getMyClipboard().getContents(ActionManager.getInstance()); 
+		DataFlavor parametri = null;
+		parametri = new DataFlavor((new ArrayList<>()).getClass(),"parametri");
+		
+		if ((contents != null) &&
+			 	(contents.isDataFlavorSupported (parametri))) {
+			try {
+				ArrayList<ParametarNode> nodesToPaste = (ArrayList<ParametarNode>)
+						contents.getTransferData (parametri);
+				
+				MainFrame.getInstance().getSplitPanel().getTree().paste(nodesToPaste);
+				
+			} catch (Exception z) {
+				z.printStackTrace();
+			} 	
+		}		
+	}
+
+}

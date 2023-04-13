@@ -1,0 +1,88 @@
+package listeners;
+
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.tree.TreePath;
+
+import model.UserType;
+import model.myTree.ModulNode;
+import model.myTree.MyTreeNode;
+import model.myTree.ParametarNode;
+import view.MainFrame;
+import view.ToolBar;
+import view.menu.MenuFile;
+import view.menu.MyMenuBar;
+
+public class TreeMouseListener extends MyMouseListener{
+
+	@Override
+	public void myMouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getButton()==MouseEvent.BUTTON1)
+		{
+
+			if(MainFrame.getInstance().getUser().getUserType().equals(UserType.administrator))
+			{
+				MyTreeNode node;
+				if(e.getClickCount()==1)
+				{
+					MenuFile menuFile =((MyMenuBar)( MainFrame.getInstance().getJMenuBar())).getMenuFile();
+					ToolBar tb = (ToolBar) MainFrame.getInstance().getTb();
+					menuFile.getMenuComponent(8).setEnabled(true);
+					menuFile.getMenuComponent(9).setEnabled(true);
+					menuFile.getMenuComponent(10).setEnabled(true);
+					tb.getComponent(8).setEnabled(true);
+					tb.getComponent(9).setEnabled(true);
+					tb.getComponent(10).setEnabled(true);
+					ArrayList<TreePath> paths = new ArrayList<>(Arrays.asList(
+							MainFrame.getInstance().getSplitPanel().getTree().getSelectionPaths()));
+					for (TreePath path : paths)
+					{
+						node = (MyTreeNode) path.getLastPathComponent();
+						if(!(node instanceof ParametarNode))
+						{
+							menuFile.getMenuComponent(8).setEnabled(false);
+							menuFile.getMenuComponent(9).setEnabled(false);
+							tb.getComponent(8).setEnabled(false);
+							tb.getComponent(9).setEnabled(false);
+						}
+						if(!(node instanceof ModulNode)||paths.size()!=1)
+						{
+							menuFile.getMenuComponent(10).setEnabled(false);
+							tb.getComponent(10).setEnabled(false);
+						}
+					}
+					
+				}
+			}
+			
+		}
+	}
+
+	@Override
+	public void myMouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void myMouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void myMousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void myMouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

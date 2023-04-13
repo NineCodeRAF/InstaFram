@@ -1,0 +1,50 @@
+package view.dialogs;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import listeners.dialogListeners.CompanyOkListener;
+import listeners.dialogListeners.ModulOrParameterCancelListener;
+import listeners.dialogListeners.OpenModulDialogListener;
+import listeners.dialogListeners.OpenParameterDialogListener;
+import view.MainFrame;
+
+public class ModulOrParameterDialog extends JDialog{
+	private static ModulOrParameterDialog instance = null;	
+	public ModulOrParameterDialog() {
+		
+		setLayout(null);
+		setResizable(false);
+		setTitle("Add new modul or parameter");
+		setSize(520, 95);
+		setLocationRelativeTo(MainFrame.getInstance());
+		initialize();
+	}
+	
+	public void initialize() {
+		
+
+		
+		JButton btnNewModul = new JButton("New Modul");
+		JButton btnNewParameter = new JButton("New Parameter");
+		JButton btnCancel = new JButton("Cancel");
+		
+		btnNewModul.setBounds(60, 20, 140, 25);
+		btnNewParameter.setBounds(220, 20, 140, 25);
+		btnCancel.setBounds(380, 20, 80, 25);
+		
+		btnNewModul.addActionListener(new OpenModulDialogListener());
+		btnNewParameter.addActionListener(new OpenParameterDialogListener());
+		btnCancel.addActionListener(new ModulOrParameterCancelListener());
+		
+		add(btnNewModul);
+		add(btnNewParameter);
+		add(btnCancel);
+	}
+	public static ModulOrParameterDialog getInstance() {
+		if(instance==null) instance = new ModulOrParameterDialog();
+		return instance;
+	}
+}

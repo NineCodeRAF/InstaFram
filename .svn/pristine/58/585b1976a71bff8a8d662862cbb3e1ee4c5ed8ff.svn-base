@@ -1,0 +1,35 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import model.MyTreeModel;
+import model.myTree.MyTreeNode;
+import model.observer.Obs;
+import view.MainFrame;
+import view.TabView;
+
+public class DeleteNode extends AbstractActions{
+
+	public DeleteNode() {
+		// TODO Auto-generated method stub
+		putValue(ACCELERATOR_KEY,KeyStroke.getKeyStroke(
+		        KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+		putValue(SMALL_ICON, loadIcon("images/delete.png"));
+		putValue(NAME, "Delete project");
+		putValue(SHORT_DESCRIPTION, "Delete project");
+	}
+
+@Override
+public void actionPerformed(ActionEvent e) {
+	Object selectedNode =  MainFrame.getInstance().getSplitPanel().getTree().getLastSelectedPathComponent();
+	if(selectedNode instanceof MyTreeNode)
+		ActionManager.getInstance().getMessages().brisanjeCvora(selectedNode);
+	}
+}
+

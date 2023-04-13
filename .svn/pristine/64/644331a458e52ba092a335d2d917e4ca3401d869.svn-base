@@ -1,0 +1,39 @@
+package view.menu;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Box;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+
+import view.AboutView;
+
+public class MyMenuBar extends JMenuBar{
+	
+	MenuFile menuFile;
+	
+	public MyMenuBar(int x) {
+		
+		addComp(x);
+		
+		
+	}
+	
+	private void addComp(int x)
+	{
+		add(menuFile = new MenuFile(x));
+		add(new MenuView());
+		add(new MenuTools());
+		add(Box.createHorizontalGlue());
+		add(new JLabel("OTVORI HELP PRVO!!!"));
+		add(Box.createHorizontalGlue());
+		add(new MenuParameterization());
+		add(new MenuHelp());
+		add(new MenuAbout());
+	}
+	
+	public MenuFile getMenuFile() {
+		return menuFile;
+	}
+}

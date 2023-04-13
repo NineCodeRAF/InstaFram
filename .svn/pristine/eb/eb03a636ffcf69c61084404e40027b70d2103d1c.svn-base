@@ -1,0 +1,19 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import view.LogInView;
+import view.dialogs.RegisterDialog;
+
+public class RegisterUserClose extends AbstractActions{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		RegisterDialog.getInstance().dispose();
+		LogInView.getInstance().setVisible(true);
+		RegisterDialog.getInstance().getTfUsername().setText("");
+		RegisterDialog.getInstance().getTfPassword().setText("");
+		RegisterDialog.getInstance().getTfConfirmPassword().setText("");		
+	}
+
+}

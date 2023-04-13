@@ -1,0 +1,9 @@
+package model.observer;
+
+import model.myTree.MyTreeNode;
+
+public interface Obs {
+	
+	public void update(MyTreeNode node);
+
+}

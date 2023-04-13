@@ -1,0 +1,39 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
+
+import model.User;
+import view.LogInView;
+import view.MainFrame;
+
+public class LogIn extends AbstractActions{
+
+	
+	public LogIn() {
+		putValue(NAME, "Log in");
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		func();
+	}
+	
+	public void func()
+	{
+		for(User u : LogInView.getInstance().getUsers())
+		{
+			if(u.getUsername().equals(LogInView.getInstance().getTfUsername().getText())&&u.getPassword().equals(LogInView.getInstance().getTfPassword().getText()))
+			{
+				LogInView.getInstance().setUser(u);
+				LogInView.getInstance().dispose();
+				MainFrame.getInstance();
+				LogInView.getInstance().getTfUsername().setText("");
+				LogInView.getInstance().getTfPassword().setText("");
+			}
+		}
+	}
+
+}

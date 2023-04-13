@@ -1,0 +1,169 @@
+package model.myTree;
+
+import java.awt.Font;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+
+import model.observer.Obs;
+import model.observer.Subject;
+import view.MainFrame;
+import view.RightBot;
+import view.TabView;
+import view.Tree;
+
+public class MyTreeNode extends DefaultMutableTreeNode implements Subject, Serializable{
+	
+	private ArrayList<MyTreeNode> children = new ArrayList<>();
+	private MyTreeNode parent;
+	private String name;
+	private ArrayList<Obs> obsList = new ArrayList<>();
+	
+	public MyTreeNode(String name) {
+		this.name=name;
+		
+		
+	}
+
+	@Override
+	public Enumeration children() {
+		// TODO Auto-generated method stub
+		return Collections.enumeration(children);
+	}
+
+	@Override
+	public boolean getAllowsChildren() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public TreeNode getChildAt(int childIndex) {
+		// TODO Auto-generated method stub
+		return children.get(childIndex);
+	}
+
+	@Override
+	public int getChildCount() {
+		// TODO Auto-generated method stub
+		return children.size();
+	}
+
+	@Override
+	public int getIndex(TreeNode node) {
+		// TODO Auto-generated method stub
+		return children.indexOf(node);
+	}
+
+	@Override
+	public MyTreeNode getParent() {
+		// TODO Auto-generated method stub
+		return parent;
+	}
+
+	
+	public ArrayList<MyTreeNode> getChildren() {
+		return children;
+	}
+
+	@Override
+	public void insert(MutableTreeNode child, int index) {
+		if(this.children.contains(child))
+		{
+			this.children.remove(child);
+		}
+		
+		this.children.add(index, (MyTreeNode)child);
+		
+		
+	}
+
+	@Override
+	public void remove(int index) {
+		this.children.get(index).setParent(null);
+		this.children.remove(index);
+		
+	}
+
+	@Override
+	public void remove(MutableTreeNode node) {
+
+		this.children.get(this.children.indexOf(node)).setParent(null);
+		this.children.remove(node);
+	}
+
+	@Override
+	public void removeFromParent() {
+		
+		parent.remove(this);
+		this.setParent(null);
+		
+	}
+
+	@Override
+	public void setParent(MutableTreeNode parent) {
+		
+		this.parent = (MyTreeNode)parent;
+	}
+
+	@Override
+	public void setUserObject(Object arg0) {
+		// TODO Auto-generated method stub
+			}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name;
+	}
+
+	@Override
+	public boolean isLeaf() {
+		if(this.children.size()==0)
+			return true;
+		return false;
+	}
+	
+	public void setName(String name) {
+		MyTreeNode prev = this;
+		this.name = name;
+		notifyObserver();
+	}
+	
+	public void addNode(MyTreeNode node)
+	{
+		children.add(node);
+		node.setParent(this);
+	}
+	
+	@Override
+	public void register(Obs addObs) {
+		// TODO Auto-generated method stub
+		obsList.add(addObs);
+		
+	}
+
+	@Override
+	public void unregister(Obs deleteObs) {
+		// TODO Auto-generated method stub
+		if(obsList.contains(deleteObs))
+		obsList.remove(deleteObs);
+		
+	}
+
+	@Override
+	public void notifyObserver() {
+		for(Obs o : obsList)
+		{
+			o.update(this);
+		}
+		
+	}
+}

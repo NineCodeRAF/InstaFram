@@ -1,0 +1,114 @@
+package view.panels;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.ImageFilter;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
+
+import actions.ActionManager;
+import model.myTree.ParametarNode;
+
+public class ParametarLogoPanel extends JPanel{
+	
+	private JLabel lbLogo;
+	private JTextField tfLogo;
+	private JButton btnSave;
+	private JButton btnChoose;
+	private ParametarNode node;
+	
+	public ParametarLogoPanel() {
+		// TODO Auto-generated constructor stub
+		func();
+	}
+	
+	public void func()
+	{
+		lbLogo = new JLabel("Choose path to logo:");
+		tfLogo = new JTextField();
+		btnSave = new JButton("Save");
+		btnChoose = new JButton("Choose");
+		JPanel bottomPanel = new JPanel();
+		JPanel centralPanel = new JPanel();
+		
+		BorderLayout borderLayout = new BorderLayout(10,10);
+		FlowLayout bottomFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		FlowLayout centarFlowLayout = new FlowLayout(FlowLayout.CENTER,10,10);
+		
+		btnSave.setPreferredSize(new Dimension(150,50));
+		tfLogo.setPreferredSize(new Dimension(200, 30));
+		
+		centralPanel.setLayout(centarFlowLayout);
+		bottomPanel.setLayout(bottomFlowLayout);
+		
+		setLayout(borderLayout);
+		
+		centralPanel.add(lbLogo); 
+		centralPanel.add(tfLogo);
+		centralPanel.add(btnChoose);
+		
+		bottomPanel.add(btnSave);
+		
+		this.add(bottomPanel, BorderLayout.SOUTH);
+		this.add(centralPanel,BorderLayout.CENTER);
+	
+		btnSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				node.setStr(tfLogo.getText());
+			}
+		});
+		
+		btnChoose.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				chooser.setFileFilter(new FileFilter() {
+					
+					@Override
+					public String getDescription() {
+						// TODO Auto-generated method stub
+						return "\".jpg\",\".jpeg\",\".png\",\".git\"";
+					}
+					
+					@Override
+					public boolean accept(File f) {
+						if(f.toString().endsWith(".jpg")||f.toString().endsWith(".jpeg")||
+								f.toString().endsWith(".png")||f.toString().endsWith(".gif"))
+								return true;
+						return false;
+					}
+				});
+				int returnVal = chooser.showOpenDialog(null);
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					String str = chooser.getSelectedFile().toString();
+					if(str.endsWith(".jpg")||str.endsWith(".jpeg")||str.endsWith(".png")||str.endsWith(".git"))
+						tfLogo.setText(chooser.getSelectedFile().getAbsolutePath());
+					else
+						ActionManager.getInstance().getMessages().nijeSlika();
+				}
+			}
+		});
+
+	}
+	public JTextField getTfLogo() {
+		return tfLogo;
+	}
+	
+	public void setNode(ParametarNode node) {
+		this.node = node;
+	}
+}

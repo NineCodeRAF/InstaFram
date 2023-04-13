@@ -1,0 +1,66 @@
+package view.dialogs;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import listeners.dialogListeners.ProjekatCancelListener;
+import listeners.dialogListeners.ProjekatOkListener;
+import view.MainFrame;
+
+public class NewProjectDialog extends JDialog{
+	
+	private static NewProjectDialog instance = null;
+	private JLabel name;
+	private JTextField tfName;
+	
+	public NewProjectDialog() {
+		
+		setLayout(null);
+		setResizable(false);
+		setTitle("Add new project");
+		setSize(400, 170);
+		setLocationRelativeTo(MainFrame.getInstance());
+		initialize();
+	}
+	
+	public void initialize() {
+		
+		name = new JLabel("Enter name of project:");
+		tfName = new JTextField();
+
+		name.setBounds(10, 35, 200, 25);
+		tfName.setBounds(180, 35, 190, 25);
+		
+		JButton btnOk = new JButton("Ok");
+		JButton btnCancel = new JButton("Cancel");
+		ProjekatOkListener listener = new ProjekatOkListener(this);
+		
+		btnOk.setBounds(120, 100, 70, 25);
+		btnCancel.setBounds(210, 100, 80, 25);
+		
+		btnOk.addActionListener(listener);
+		btnCancel.addActionListener(new ProjekatCancelListener(this));
+		tfName.addKeyListener(listener);
+		
+		add(name);
+		add(tfName);
+		add(btnOk);
+		add(btnCancel);
+	}
+	
+	public static NewProjectDialog getInstance() {
+		if(instance==null) instance = new NewProjectDialog();
+		return instance;
+	}
+
+	public String getName() {
+		return tfName.getText();
+	}
+
+	public void setName(String name) {
+		tfName.setText(name);
+	}
+
+}
